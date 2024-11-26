@@ -122,3 +122,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#API TRANSBANK
+TRANSBANK_COMMERCE_CODE = '597055555532'  # clave de integración
+TRANSBANK_API_KEY = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'  # secreto de integración
+TRANSBANK_ENVIRONMENT = 'TEST'  # cambiar a 'PRODUCCION' al pasar al entorno real
+
+#IMGAGENES DE BD
