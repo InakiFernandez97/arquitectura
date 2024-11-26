@@ -6,7 +6,6 @@ from django.conf import settings
 from datetime import date;
 import requests;
 import math
-import bcchapi;
 
 # Create your views here.
 
@@ -381,7 +380,7 @@ def obtener_credenciales(ruta_archivo):
 
 def usarSerie():
 
-    user, password = obtener_credenciales('C:\Users\Inaki\OneDrive\Documentos\arq\arquitectura\tallerApp\credenciales.txt')
+    user, password = obtener_credenciales('C:/Users/Inaki/OneDrive/Documentos/arq/arquitectura/tallerApp/credenciales.txt')
 
     fecha1=str(date.today())
     fecha2=str(date.today())
