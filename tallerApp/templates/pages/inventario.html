@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <main>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    <h2 class="my-3">Inventario</h2>
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Categoria</th>
+                            <th>Marca</th>
+                            <th>Valor</th>
+                            <th>Stock</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if productos %}
+                            {% for tmp in productos %}
+                            <tr>
+                                <td>{{tmp.id_producto}}</td>
+                                <td>{{tmp.nom_producto}}</td>
+                                <td>{{tmp.categoria}}</td>
+                                <td>{{tmp.marca}}</td>
+                                <td>$ {{tmp.valor}}</td>
+                                <td>{{tmp.stock}}</td>
+                                <td><a href="{% url 'prod_findEdit' pk=tmp.id_producto %}"><button class="btn btn-warning">Modificar</button></a></td>
+                                <td><a href="{% url 'prod_del' pk=tmp.id_producto %}"><button class="btn btn-class danger bg-light">Eliminar</button></a></td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    <div>
+                        <a href="{% url 'prod_add' %}"><button class="btn btn-primary">Agregar Producto</button></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% load static %}
+
+<footer class="position-static bottom-0 start-50">
+    
+    <div class="container-fluid">
+
+      <div class="footer-row">
+
+        <div class="footer-links text-bg-dark">
+
+          <h4>Compañia</h4>
+          <ul>
+            <li><a href="{% url 'index' %}">Nosotros</a></li>
+            <li><a href="{% url 'index' %}">Servicios</a></li>
+            <li><a href="{% url 'index' %}">Politicas</a></li>
+          </ul>
+
+        </div>
+        <div class="footer-links text-bg-dark">
+        
+          <h4>Ayuda</h4>
+          <ul>
+            <li><a href="{% url 'index' %}">Preguntas</a></li>
+            <li><a href="{% url 'index' %}">Compras</a></li>
+            <li><a href="{% url 'index' %}">Envios</a></li>
+            <li><a href="{% url 'index' %}">Estatus de orden</a></li>
+            <li><a href="{% url 'index' %}">Pagos</a></li>
+          </ul>
+        
+        </div>
+        <div class="footer-links text-bg-dark">
+        
+          <h4>Tienda</h4>
+          <ul>
+            <li><a href="{% url 'herramientas' %}">Herramientas</a></li>
+            <li><a href="{% url 'muebles' %}">Muebles</a></li>
+            <li><a href="{% url 'seguridad' %}">Seguridad</a></li>
+            <li><a href="{% url 'proteccion' %}">Proteccion</a></li>
+          </ul>
+        
+        </div>
+        <div class="footer-links text-bg-dark">
+        
+          <h4>Siguenos</h4>
+          <div class="social-links">
+            <a href="{% url 'index' %}"><i class="bi bi-facebook"></i></a>
+            <a href="{% url 'index' %}"><i class="bi bi-instagram"></i></a>
+            <a href="{% url 'index' %}"><i class="bi bi-twitter-x"></i></a>
+          </div>
+        
+        </div>
+
+        <div class="dropdown text-bg-dark">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Moneda
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'moneda' 'CLP' %}">CLP</a></li>
+            <li><a class="dropdown-item" href="{% url 'moneda' 'USD' %}">USD</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+</footer>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3" style="background-color: rgb(255, 248, 227);">
+                    <h2 class="my-3">Formulario de modificacion</h2>
+                    <form action="{% url 'producto_edit' %}" method="POST" class="form-floating">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="id_prod" value="{{ producto.id_producto }}">
+
+                        <div class="form-floating mb-3 w-50 mx-auto">
+                            <input type="text" class="form-control" id="nombre" name="nombre">
+                            <label for="nombre">Nombre</label>
+                            <button type="submit" name="modificar_nombre" class="btn btn-primary">modificar</button>
+                        </div>
+
+                        <div class="form-floating mb-3 w-50 mx-auto">
+                            
+                            <select class="form-select" id="categoria" name="categoria">
+                                {% for tmp in categorias %}
+                                    <option value="{{tmp.id_categoria}}" {% if tmp.nombre_c == producto.id_categoria.categoria %}selected{% endif %}>
+                                        {{tmp.nombre_c}}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <label for="categoria">Categoria</label>
+                            <button type="submit" name="modificar_categoria" class="btn btn-primary">modificar</button>
+                        </div>
+
+                        <div class="form-floating mb-3 w-50 mx-auto">
+                            <input type="text" class="form-control" id="marca" name="marca">
+                            <label for="marca">Marca</label>
+                            <button type="submit" name="modificar_marca" class="btn btn-primary">modificar</button>
+                        </div>
+                        <div class="form-floating mb-3 w-25 mx-auto">
+                            <input type="number" class="form-control" id="valor" name="valor">
+                            <label for="valor" class="form-label">Valor</label>
+                            <button type="submit" name="modificar_valor" class="btn btn-primary">modificar</button>
+                        </div>
+                        <div class="form-floating mb-3 w-25 mx-auto">
+                            <input type="number" class="form-control" id="stock" name="stock">
+                            <label for="stock" class="form-label">Stock</label>
+                            <button type="submit" name="modificar_stock" class="btn btn-primary">modificar</button>
+                        </div>
+
+                        <div>
+                            {% if mensaje %}
+                            <div class="alert alert-success w-50 mx-auto">
+                                {{mensaje}}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a href="{% url 'inventario' %}">
+                                <button type="button">Volver</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

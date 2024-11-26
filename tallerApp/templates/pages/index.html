@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    {% include 'base/header.html' %}
+
+    <main>
+        <!-- ESTE ES EL CARRUSEL -->
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            {% include 'base/carrousel.html' %}
+        </section>
+        <!-- SECCION DE CATEGORIAS DESTACADAS -->
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2 style="">Destacados</h2>
+            <div class="container text-center">
+                <div class="row gap-3 justify-content-center">
+
+                    <div class="col-10 col-md-4 col-lg-2 shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                        <div>
+                            <a class="titulo-noSub" href="{% url 'muebles' %}">
+                                <div class="contenedor-item">
+                                    <img src="{% static 'images/12.jpg' %}" alt="">
+                                    <h3>Muebles</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+    
+                    <div class="col-10 col-md-4 col-lg-2 shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                        <div>
+                            <a class="titulo-noSub" href="{% url 'proteccion' %}">
+                                <div class="contenedor-item">
+                                    <img src="{% static 'images/13.jpg' %}" alt="">
+                                    <h3>Proteccion Personal</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+    
+                    <div class="col-10 col-md-4 col-lg-2 shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                        <div>
+                            <a class="titulo-noSub" href="{% url 'herramientas' %}">
+                                <div class="contenedor-item">
+                                    <img src="{% static 'images/14.jpg' %}" alt="">
+                                    <h3>Herramientas</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+    
+                    <div class="col-10 col-md-4 col-lg-2 shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                        <div>
+                            <a class="titulo-noSub" href="{% url 'seguridad' %}">
+                                <div class="contenedor-item">
+                                    <img src="{% static 'images/15.jpg' %}" alt="">
+                                    <h3>Seguridad</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Productos Herramientas -->
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Herramientas</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in herramientas %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
+        <!-- Productos Muebles-->
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Muebles</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in muebles %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
+        <!-- Productos Seguridad-->
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Seguridad</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in seguridad %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
+        <!-- Productos Proteccion-->
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Proteccion</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in proteccion %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
+        {% include 'base/footer.html' %}
+    </main>
+    
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>
