@@ -7,6 +7,8 @@ from datetime import date;
 import requests;
 import math
 
+
+
 # Create your views here.
 
 def grupo_cliente(user):
