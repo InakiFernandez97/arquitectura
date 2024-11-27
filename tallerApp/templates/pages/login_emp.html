@@ -16,9 +16,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 shadow-lg mx-auto text-center p-3">
-                    <form action="{% url 'login' %}" method="POST">
+                    <form action="{% url 'login_emp' %}" method="POST">
                         {% csrf_token %}
-                        <h2>Login de Acceso</h2>
+                        <h2>Acceso Empleado</h2>
                         <div class="form-floating mb-3 w-25 mx-auto">
                             <input type="text" class="form-control" id="email" name="email" placeholder="">
                             <label for="email" class="form-label">Correo</label>
@@ -39,16 +39,15 @@
                                 </button>
                             </a>
                         </div>
-                        
                         <div class="form-floating mb-3 w-25 mx-auto">
                             <button type="submit" class="btn btn-primary">Ingresar</button>
                         </div>
                     </form>
 
                     <div class="form-floating mb-3 w-25 mx-auto">
-                        <a href="{% url 'login_emp' %}">
+                        <a href="{% url 'login' %}">
                             <button class="btn btn-secondary">
-                                Login Empleado
+                                Login Cliente
                             </button>
                         </a>
                     </div>

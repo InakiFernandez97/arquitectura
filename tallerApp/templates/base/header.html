@@ -4,7 +4,7 @@
 
   <div class="container-fluid">
 
-    <a class="navbar-brand" href="{% url 'index' %}"><img src="" alt="Logo"></a>
+    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/serviexpress-logo.png' %}" alt="Logo" style="height: 50px;"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -22,28 +22,31 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active" href="">Nosotros</a>
+          <a class="nav-link active" href="{% url 'reserva' %}">Reservar hora</a>
         </li>
 
-        <li class="nav-item dropdown">
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'catalogo' %}">Catalogo</a>
+        </li>
+        <!-- <li class="nav-item dropdown">
           <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Categoria
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="{% url 'herramientas' %}">Herramientas</a>
+              <a class="dropdown-item" href="">Herramientas</a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'muebles' %}">Muebles</a>
+              <a class="dropdown-item" href="">Muebles</a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'seguridad' %}">Seguridad</a>
+              <a class="dropdown-item" href="">Seguridad</a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'proteccion' %}">Proteccion</a>
+              <a class="dropdown-item" href="">Proteccion</a>
             </li>
           </ul>
-        </li>
+        </li> -->
 
         <li class="nav-item">
           <a class="nav-link active " href="">Contacto</a>
@@ -65,7 +68,7 @@
         <a href="{% url 'login' %}" class="d-flex">
           <button>Iniciar Sesión</button>
         </a>
-        <a href="" class="d-flex">
+        <a href="{% url 'registro' %}" class="d-flex">
           <button class="">Registrarse</button>
         </a>
       </div>

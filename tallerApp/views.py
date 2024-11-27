@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 # from django.contrib.auth import authenticate, login as auth_login
-from .models import Producto, Categoria
+from .models import Cliente, Reserva, Servicio, Empleado, Tipo_empleado, Producto, Categoria
 from transbank.webpay.webpay_plus.transaction import Transaction
 from django.conf import settings
 from datetime import date;
@@ -18,16 +18,16 @@ def grupo_inventario(user):
     return user.groups.filter(name='inventario').exists()
 
 def index(request):
-    herramientas = Producto.objects.filter(categoria=2)
-    muebles = Producto.objects.filter(categoria=4)
-    seguridad = Producto.objects.filter(categoria=3)
-    proteccion = Producto.objects.filter(categoria=1)
+    baterias = Producto.objects.filter(categoria=1)
+    frenos = Producto.objects.filter(categoria=2)
+    motores = Producto.objects.filter(categoria=3)
+    ruedas = Producto.objects.filter(categoria=4)
     
     context = {
-        'herramientas': herramientas,
-        'muebles': muebles,
-        'seguridad': seguridad,
-        'proteccion': proteccion,
+        'baterias': baterias,
+        'frenos': frenos,
+        'motores': motores,
+        'ruedas': ruedas,
     }
     
     return render(request, 'pages/index.html', context)
@@ -66,47 +66,44 @@ def carrito(request):
 
 #     return render(request,'pages/carrito.html',{'cart': cart, 'total_price': total_price})
 
-def catalogo(request):
-    producto = None
+
+def reserva(request):
     if request.method == "POST":
-        producto_id = request.POST.get('id_producto')
-        if producto_id:
-             producto = Producto.objects.get(id_producto=producto_id)
-    
+        fecha = request.POST["fecha"]
+        hora = request.POST["hora"]
+        servicio_id = request.POST["servicio"]
 
-    return render(request, 'pages/catalogo.html', {'producto':producto})
+        objCategoria = Servicio.objects.get(id_servicio=servicio_id)
+        Reserva.objects.create(
+            fecha_reserva=fecha,
+            hora_servicio=hora,
+            servicio=objCategoria,
+        )
+        context = {
+            "mensaje": "Reserva exitosa",
+        }
+        return render(request, "pages/reserva.html", context)
+    else:
+        servicio = Servicio.objects.all()
+        context = {
+            "servicio": servicio,
+        }
+        return render(request, "pages/reserva.html", context)
 
-def herramientas(request):
-    herramientas = Producto.objects.filter(categoria=2)
-    
-    context = {
-        'herramientas': herramientas,
-    }
-    return render(request,'pages/herramientas.html',context)
 
-def muebles(request):
-    muebles = Producto.objects.filter(categoria=4)
-    
-    context = {
-        'muebles': muebles,
-    }
-    return render(request,'pages/muebles.html',context)
-
-def seguridad(request):
-    seguridad = Producto.objects.filter(categoria=3)
-    
-    context = {
-        'seguridad': seguridad,
-    }
-    return render(request,'pages/seguridad.html',context)
-
-def proteccion(request):
-    proteccion = Producto.objects.filter(categoria=1)
+def catalogo(request):
+    baterias = Producto.objects.filter(categoria=4)
+    frenos = Producto.objects.filter(categoria=3)
+    motores = Producto.objects.filter(categoria=2)
+    ruedas = Producto.objects.filter(categoria=1)
     
     context = {
-        'proteccion': proteccion,
+        'baterias': baterias,
+        'frenos': frenos,
+        'motores': motores,
+        'ruedas': ruedas,
     }
-    return render(request,'pages/proteccion.html',context)
+    return render(request,'pages/catalogo.html',context)
 
 
 def inventario(request):
@@ -115,6 +112,7 @@ def inventario(request):
         "productos":productos,
     }
     return render(request, "pages/inventario.html", context)
+
 
 def prod_findEdit (request,pk):
     if pk != "":
@@ -132,7 +130,8 @@ def prod_findEdit (request,pk):
             "producto":producto
         }
         return render(request, "pages/inventario.html", context)
-    
+
+
 def prod_del(request, pk):
     try:
         producto = Producto.objects.get(id_producto=pk)
@@ -150,7 +149,8 @@ def prod_del(request, pk):
             "productos": productos,
         }
         return render(request, "pages/inventario.html", context)
-    
+
+
 def prod_add(request):
     if request.method != "POST":
         categorias = Categoria.objects.all()
@@ -180,7 +180,8 @@ def prod_add(request):
             "mensaje": "Registro exitoso",
         }
         return render(request, "pages/prod_add.html", context)
-    
+
+
 def producto_edit(request):
     if request.method == "POST":
 
@@ -253,9 +254,100 @@ def producto_edit(request):
         }
         return render(request, "pages/producto_edit.html", context)
 
-def login(request):
+def registro(request):
+    if request.method != "POST":
+        return render(request, "pages/registro.html")
+    else:
+        nombre = request.POST["nombre"]
+        email = request.POST["email"]
+        fono = request.POST["fono"]
+        password = request.POST["password"]
 
-    return render(request, 'pages/login.html')
+        # Verificar si el email ya existe
+        if Cliente.objects.filter(email=email).exists():
+            context = {
+                "mensaje": "El correo ya está registrado."
+            }
+            return render(request, "pages/registro.html", context)
+
+        # Crear nuevo cliente
+        obj = Cliente.objects.create(
+            nombre=nombre,
+            email=email,
+            telefono=fono,
+            contrasena=password
+        )
+        obj.save()
+        context = {
+            "mensaje": "Registro exitoso"
+        }
+        return render(request, "pages/registro.html", context)
+
+def login(request):
+    if request.method != "POST":
+        return render(request, "pages/login.html")
+    else:
+        email = request.POST["email"]
+        password = request.POST["password"]
+
+        try:
+            # Verificar si el cliente existe
+            cliente = Cliente.objects.get(email=email)
+
+            # Comparar contraseñas directamente
+            if cliente.contrasena == password:
+                # Guardar información de sesión del usuario
+                request.session["cliente_id"] = cliente.id
+                request.session["cliente_nombre"] = cliente.nombre
+
+                # Redirigir a la página de inicio o dashboard
+                return render(request, "pages/index.html")  # Cambia "inicio" por tu vista principal
+            else:
+                # Contraseña incorrecta
+                context = {
+                    "mensaje": "Contraseña incorrecta."
+                }
+                return render(request, "pages/login.html", context)
+
+        except Cliente.DoesNotExist:
+            # Usuario no encontrado
+            context = {
+                "mensaje": "El usuario no existe."
+            }
+            return render(request, "pages/login.html", context)
+
+def login_emp(request):
+    if request.method != "POST":
+        return render(request, "pages/login_emp.html")
+    else:
+        email = request.POST["email"]
+        password = request.POST["password"]
+
+        try:
+            # Verificar si el empleado existe
+            empleado = Empleado.objects.get(mail_empleado=email)
+
+            # Comparar contraseñas directamente
+            if empleado.contrasena_emp == password:
+                # Guardar información de sesión del usuario
+                # request.session["cliente_id"] = empleado.id
+                # request.session["cliente_nombre"] = empleado.nombre
+
+                # Redirigir a la página de inicio o dashboard
+                return redirect('inventario')  # Redirigir a la función inventario
+            else:
+                # Contraseña incorrecta
+                context = {
+                    "mensaje": "Contraseña incorrecta."
+                }
+                return render(request, "pages/login_emp.html", context)
+
+        except Empleado.DoesNotExist:
+            # Usuario no encontrado
+            context = {
+                "mensaje": "El usuario no existe."
+            }
+            return render(request, "pages/login_emp.html", context)
 
 def logout(request):
     logout(request)
@@ -269,33 +361,35 @@ def mal(request):
 
     return render(request, 'pages/failure.html')
 
-def pagar(request):
-    cart = request.session.get('cart', {})
-    moneda = request.session.get('moneda', 'CLP')
-    valor_dolar = obtener_valor_dolar()
-    total_amount = sum(float(item['precio']) * item['cantidad'] for item in cart.values())
 
-    transaction = Transaction()
-    transaction.commerce_code = settings.TRANSBANK_COMMERCE_CODE
-    transaction.api_key = settings.TRANSBANK_API_KEY
-    transaction.enviroment = settings.TRANSBANK_ENVIRONMENT
+# def pagar(request):
+#     cart = request.session.get('cart', {})
+#     moneda = request.session.get('moneda', 'CLP')
+#     valor_dolar = obtener_valor_dolar()
+#     total_amount = sum(float(item['precio']) * item['cantidad'] for item in cart.values())
 
-    if moneda == 'USD':
-        response = transaction.create(
-        buy_order='order12345',
-        session_id='session12345',
-        amount= math.trunc(round(total_amount / valor_dolar) ),
-        return_url='http://127.0.0.1:8000/main/transaccion_completa'
-        )
-    else:
-        response = transaction.create(
-            buy_order='order12345',
-            session_id='session12345',
-            amount= total_amount,
-            return_url='http://127.0.0.1:8000/main/transaccion_completa'
-        )
-    print(response)
-    return redirect(response['url'] + '?token_ws=' + response['token'])
+#     transaction = Transaction()
+#     transaction.commerce_code = settings.TRANSBANK_COMMERCE_CODE
+#     transaction.api_key = settings.TRANSBANK_API_KEY
+#     transaction.enviroment = settings.TRANSBANK_ENVIRONMENT
+
+#     if moneda == 'USD':
+#         response = transaction.create(
+#         buy_order='order12345',
+#         session_id='session12345',
+#         amount= math.trunc(round(total_amount / valor_dolar) ),
+#         return_url='http://127.0.0.1:8000/main/transaccion_completa'
+#         )
+#     else:
+#         response = transaction.create(
+#             buy_order='order12345',
+#             session_id='session12345',
+#             amount= total_amount,
+#             return_url='http://127.0.0.1:8000/main/transaccion_completa'
+#         )
+#     print(response)
+#     return redirect(response['url'] + '?token_ws=' + response['token'])
+
 
 def transaccion_completa(request):
     token_ws = request.GET.get('token_ws')
@@ -310,92 +404,91 @@ def transaccion_completa(request):
     except Exception as e:
         return render(request, 'pages/failure.html', {'reason': str(e)})
 
-def agregar_carrito(request, prod_id):
-    producto = get_object_or_404(Producto, id_producto=prod_id)
+
+# def agregar_carrito(request, prod_id):
+#     producto = get_object_or_404(Producto, id_producto=prod_id)
     
-    # Inicializar el carrito si no existe
-    cart = request.session.get('cart', {})
+#     # Inicializar el carrito si no existe
+#     cart = request.session.get('cart', {})
 
-    prod_id_str = str(prod_id)
+#     prod_id_str = str(prod_id)
 
-    # Agregar el producto al carrito (incrementar cantidad si ya está)
-    if prod_id_str in cart:
-        cart[prod_id_str]['cantidad'] += 1
-    else:
-        cart[prod_id_str] = {
-            'produc_id': prod_id,
-            'nombre': producto.nom_producto,
-            'precio': str(producto.valor),
-            'cantidad': 1,
-            'imagen': producto.imagen.url  # Opcional si tienes imágenes
-        }
+#     # Agregar el producto al carrito (incrementar cantidad si ya está)
+#     if prod_id_str in cart:
+#         cart[prod_id_str]['cantidad'] += 1
+#     else:
+#         cart[prod_id_str] = {
+#             'produc_id': prod_id,
+#             'nombre': producto.nom_producto,
+#             'precio': str(producto.valor),
+#             'cantidad': 1,
+#             'imagen': producto.imagen.url  # Opcional si tienes imágenes
+#         }
 
-    # Guardar el carrito de vuelta en la sesión
-    request.session['cart'] = cart
-    request.session.modified = True  # Indicar que la sesión ha cambiado
+#     # Guardar el carrito de vuelta en la sesión
+#     request.session['cart'] = cart
+#     request.session.modified = True  # Indicar que la sesión ha cambiado
 
-    return redirect('carrito')  # Cambia 'product_list' por la URL que quieras redirigir
+#     return redirect('carrito')  # Cambia 'product_list' por la URL que quieras redirigir
 
-def eliminar_carrito(request, prod_id):
-    # Obtener el carrito de la sesión
-    cart = request.session.get('cart', {})
 
-    # Convertir el ID del producto a string para usarlo como clave
-    prod_id_str = str(prod_id)
+# def eliminar_carrito(request, prod_id):
+#     # Obtener el carrito de la sesión
+#     cart = request.session.get('cart', {})
 
-    # Verificar si el producto está en el carrito
-    if prod_id_str in cart:
-        if cart[prod_id_str]['cantidad'] > 1:
-            # Reducir la cantidad del producto si es mayor a 1
-            cart[prod_id_str]['cantidad'] -= 1
-        else:
-            # Eliminar el producto del carrito si la cantidad es 1
-            del cart[prod_id_str]
+#     # Convertir el ID del producto a string para usarlo como clave
+#     prod_id_str = str(prod_id)
 
-    # Guardar el carrito actualizado en la sesión
-    request.session['cart'] = cart
-    request.session.modified = True  # Indicar que la sesión ha cambiado
+#     # Verificar si el producto está en el carrito
+#     if prod_id_str in cart:
+#         if cart[prod_id_str]['cantidad'] > 1:
+#             # Reducir la cantidad del producto si es mayor a 1
+#             cart[prod_id_str]['cantidad'] -= 1
+#         else:
+#             # Eliminar el producto del carrito si la cantidad es 1
+#             del cart[prod_id_str]
 
-    return redirect('carrito')  # Redirigir de nuevo al carrito
+#     # Guardar el carrito actualizado en la sesión
+#     request.session['cart'] = cart
+#     request.session.modified = True  # Indicar que la sesión ha cambiado
 
-def moneda(request, moneda):
-    request.session['moneda'] = moneda  # Almacenar la preferencia de moneda en la sesión
-    url_anterior = request.META.get('HTTP_REFERER')
-    return redirect(url_anterior)  # Redirige a la página de productos o carrito
+#     return redirect('carrito')  # Redirigir de nuevo al carrito
 
-def obtener_valor_dolar():
-    # Llama a la función que obtiene el valor actual del dólar
-    return float(usarSerie())
 
-# def obtener_precio_producto(precio_clp, request):
-#     # Obtiene el tipo de cambio actual (esto puede venir de la base de datos o una variable global)
-#     valor_dolar = usarSerie()
-#     if request.session.get('moneda') == 'USD':
-#         return precio_clp / valor_dolar  # Conversión a USD
-#     return precio_clp  # Dejar en CLP por defecto
+# def moneda(request, moneda):
+#     request.session['moneda'] = moneda  # Almacenar la preferencia de moneda en la sesión
+#     url_anterior = request.META.get('HTTP_REFERER')
+#     return redirect(url_anterior)  # Redirige a la página de productos o carrito
 
-def obtener_credenciales(ruta_archivo):
-    with open(ruta_archivo, 'r') as file:
-        user = file.readline().strip()  # Leer la primera línea (usuario)
-        password = file.readline().strip()  # Leer la segunda línea (contraseña)
-    return user, password
 
-def usarSerie():
+# def obtener_valor_dolar():
+#     # Llama a la función que obtiene el valor actual del dólar
+#     return float(usarSerie())
 
-    user, password = obtener_credenciales('C:/Users/Inaki/OneDrive/Documentos/arq/arquitectura/tallerApp/credenciales.txt')
 
-    fecha1=str(date.today())
-    fecha2=str(date.today())
+# def obtener_credenciales(ruta_archivo):
+#     with open(ruta_archivo, 'r') as file:
+#         user = file.readline().strip()  # Leer la primera línea (usuario)
+#         password = file.readline().strip()  # Leer la segunda línea (contraseña)
+#     return user, password
 
-    apiUrl = f"https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user={user}&pass={password}&firstdate={fecha1}&lastdate={fecha2}&timeseries=F073.TCO.PRE.Z.D&function=GetSeries"
-    respuesta = requests.get(apiUrl)
 
-    if respuesta.status_code == 200:
-        data = respuesta.json()
-        valor = data['Series']['Obs'][0]['value']
-        return valor
-    else:
-        return f"Error {respuesta.status_code}: {respuesta.text}"
+# def usarSerie():
 
-resultado = usarSerie()
-print(resultado)
+#     user, password = obtener_credenciales('C:/Users/Inaki/OneDrive/Documentos/arq/arquitectura/tallerApp/credenciales.txt')
+
+#     fecha1=str(date.today())
+#     fecha2=str(date.today())
+
+#     apiUrl = f"https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user={user}&pass={password}&firstdate={fecha1}&lastdate={fecha2}&timeseries=F073.TCO.PRE.Z.D&function=GetSeries"
+#     respuesta = requests.get(apiUrl)
+
+#     if respuesta.status_code == 200:
+#         data = respuesta.json()
+#         valor = data['Series']['Obs'][0]['value']
+#         return valor
+#     else:
+#         return f"Error {respuesta.status_code}: {respuesta.text}"
+
+# resultado = usarSerie()
+# print(resultado)

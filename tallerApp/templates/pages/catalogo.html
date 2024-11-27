@@ -3,38 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo</title>
+    <title>Herramientas</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/page.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
 <body>
-    
+
+    {% include 'base/header.html' %}
+
     <main>
-        <div class="formulario">
-            <h1>Consultar producto</h1>
-            <div class="campo">
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <pre>Código de producto:   <input type="number" id="id_producto" name="id_producto"></pre>
+        <!-- Productos Herramientas -->
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Baterias</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in baterias %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="Imagen">
+                            <div class="card-body container-fluid">
+                                <div class="h-50">
+                                    <h5 class="card-title ">{{ p.nom_producto }}</h5>
+                                </div>
+                                <div class="h-25">
+                                    <h5>$ {{ p.valor }}</h5>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
 
-                    <button type="submit">Ingresar</button>
-                </form>
-            </div>
-        </div>
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Frenos</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in frenos %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                            <div class="h-25">
+                                <h5>$ {{ p.valor }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
 
-        <div class="formulario">
-            {% if producto %}
-                <h2>Detalles del producto</h2>
-                <p>Nombre:  {{ producto.nom_producto }}</p>
-                <p>Categoria: {{ producto.categoria }}</p>
-                <p>Marca: {{ producto.marca }}</p>
-                <P>Precio : {{ producto.valor }}</P>
-            {% endif %}
-        </div>
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Motores</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in motores %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                            <div class="h-25">
+                                <h5>$ {{ p.valor }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
+
+        <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Ruedas</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in ruedas %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                            <div class="h-25">
+                                <h5>$ {{ p.valor }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section>
+
+        <!-- <section class="border border-warning-subtle text-bg-dark p-3">
+            <h2>Ruedas</h2>
+                <div class="container-fluid row gap-5 justify-content-center">
+                    {% for p in ruedas %}
+                    <div class="col-10 col-md-6 col-lg-2">
+                        <div class="card" style="width: auto;">
+                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </section> -->
 
     </main>
+    
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
+
 </html>
