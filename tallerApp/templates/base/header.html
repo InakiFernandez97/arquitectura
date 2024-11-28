@@ -1,50 +1,75 @@
 {% load static %}
 
 <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
-
   <div class="container-fluid">
-
-    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/serviexpress-logo.png' %}" alt="Logo" style="height: 50px;"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="{% url 'index' %}"
+      ><img
+        src="{% static 'images/serviexpress-logo.png' %}"
+        alt="Logo"
+        style="height: 50px"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarResponsive"
+      aria-controls="navbarResponsive"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarResponsive">
-
       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
         <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
 
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{% url 'index' %}"
+            >Inicio</a
+          >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active" href="{% url 'reserva' %}">Reservar hora</a>
+          <a class="nav-link active" href="{% url 'reserva' %}"
+            >Reservar hora</a
+          >
         </li>
 
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'catalogo' %}">Catalogo</a>
         </li>
-        
+
         <li class="nav-item">
-          <a class="nav-link active " href="">Contacto</a>
+          <a class="nav-link active" href="">Contacto</a>
         </li>
-
       </ul>
-
     </div>
 
     <div class="justify-content-center d-flex gap-3">
       <a href="{% url 'carrito' %}">
-        <button class="btn btn-outline-dark" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
-        aria-controls="offcanvasScrolling" type="button">
-            <i class="bi bi-cart"></i>
+        <button
+          class="btn btn-outline-dark"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasScrolling"
+          aria-controls="offcanvasScrolling"
+          type="button"
+        >
+          <i class="bi bi-cart"></i>
         </button>
       </a>
-      
+
       <div class="column-gap-1 d-flex">
         <a href="{% url 'login' %}" class="d-flex">
           <button>Iniciar Sesión</button>
@@ -54,8 +79,5 @@
         </a>
       </div>
     </div>
-
-
   </div>
-
 </nav>
