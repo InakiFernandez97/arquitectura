@@ -18,6 +18,16 @@
                 <div class="col-md-8 border border-warning-subtle text-bg-dark p-3">
                     <h2>Detalle de Transaccion</h2>
                     <p>Transaccion realizada</p>
+                    {% if result %}
+                    <h2>Detalles de la Transacción</h2>
+                    <ul>
+                        <li><strong>Estado:</strong> {{ result.status }}</li>
+                        <li><strong>Orden de compra:</strong> {{ result.buy_order }}</li>
+                        <li><strong>Sesión:</strong> {{ result.session_id }}</li>
+                        <li><strong>Monto:</strong> {{ result.amount }}</li>
+                        <li><strong>Fecha de transacción:</strong> {{ result.transaction_date }}</li>
+                    </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>

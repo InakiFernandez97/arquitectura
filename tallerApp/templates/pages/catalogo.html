@@ -30,7 +30,9 @@
                                 <div class="h-25">
                                     <h5>$ {{ p.valor }}</h5>
                                 </div>
-                                
+                                <div class="h-25">
+                                    <a href="{% url 'agregar_carrito' p.id_producto %}" class="btn btn-primary">Comprar</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -51,6 +53,9 @@
                             <div class="h-25">
                                 <h5>$ {{ p.valor }}</h5>
                             </div>
+                            <div class="h-25">
+                                <a href="{% url 'agregar_carrito' p.id_producto %}" class="btn btn-primary">Comprar</a>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -70,6 +75,9 @@
                             <div class="h-25">
                                 <h5>$ {{ p.valor }}</h5>
                             </div>
+                            <div class="h-25">
+                                <a href="{% url 'agregar_carrito' p.id_producto %}" class="btn btn-primary">Comprar</a>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -89,28 +97,14 @@
                             <div class="h-25">
                                 <h5>$ {{ p.valor }}</h5>
                             </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-        </section>
-
-        <!-- <section class="border border-warning-subtle text-bg-dark p-3">
-            <h2>Ruedas</h2>
-                <div class="container-fluid row gap-5 justify-content-center">
-                    {% for p in ruedas %}
-                    <div class="col-10 col-md-6 col-lg-2">
-                        <div class="card" style="width: auto;">
-                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ p.nom_producto }}</h5>
+                            <div class="h-25">
+                                <a href="{% url 'agregar_carrito' p.id_producto %}" class="btn btn-primary">Comprar</a>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
-        </section> -->
-
+        </section>
     </main>
     
 

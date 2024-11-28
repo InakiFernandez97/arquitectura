@@ -6,6 +6,7 @@ from django.conf import settings
 from datetime import date;
 import requests;
 import math
+from django.urls import reverse
 
 
 
@@ -65,7 +66,6 @@ def carrito(request):
 #     total_price = sum(float(item['precio']) * item['cantidad'] for item in cart.values())
 
 #     return render(request,'pages/carrito.html',{'cart': cart, 'total_price': total_price})
-
 
 def reserva(request):
     if request.method == "POST":
@@ -362,33 +362,37 @@ def mal(request):
     return render(request, 'pages/failure.html')
 
 
-# def pagar(request):
-#     cart = request.session.get('cart', {})
-#     moneda = request.session.get('moneda', 'CLP')
-#     valor_dolar = obtener_valor_dolar()
-#     total_amount = sum(float(item['precio']) * item['cantidad'] for item in cart.values())
+def pagar(request):
+    cart = request.session.get('cart', {})
+    moneda = request.session.get('moneda', 'CLP')
+    valor_dolar = obtener_valor_dolar()
+    total_amount = sum(float(item['precio']) * item['cantidad'] for item in cart.values())
 
-#     transaction = Transaction()
-#     transaction.commerce_code = settings.TRANSBANK_COMMERCE_CODE
-#     transaction.api_key = settings.TRANSBANK_API_KEY
-#     transaction.enviroment = settings.TRANSBANK_ENVIRONMENT
+    transaction = Transaction()
+    transaction.commerce_code = settings.TRANSBANK_COMMERCE_CODE
+    transaction.api_key = settings.TRANSBANK_API_KEY
+    transaction.enviroment = settings.TRANSBANK_ENVIRONMENT
 
-#     if moneda == 'USD':
-#         response = transaction.create(
-#         buy_order='order12345',
-#         session_id='session12345',
-#         amount= math.trunc(round(total_amount / valor_dolar) ),
-#         return_url='http://127.0.0.1:8000/main/transaccion_completa'
-#         )
-#     else:
-#         response = transaction.create(
-#             buy_order='order12345',
-#             session_id='session12345',
-#             amount= total_amount,
-#             return_url='http://127.0.0.1:8000/main/transaccion_completa'
-#         )
-#     print(response)
-#     return redirect(response['url'] + '?token_ws=' + response['token'])
+    # Generar la URL de retorno dinámicamente
+    return_url = request.build_absolute_uri(reverse('transaccion_completa'))
+
+    if moneda == 'USD':
+        response = transaction.create(
+            buy_order='order12345',
+            session_id='session12345',
+            amount=math.trunc(round(total_amount / valor_dolar)),
+            return_url=return_url
+        )
+    else:
+        response = transaction.create(
+            buy_order='order12345',
+            session_id='session12345',
+            amount=total_amount,
+            return_url=return_url
+        )
+
+    print(response)
+    return redirect(response['url'] + '?token_ws=' + response['token'])
 
 
 def transaccion_completa(request):
@@ -397,7 +401,7 @@ def transaccion_completa(request):
     try:
         result = transaction.commit(token_ws)
         if result['status'] == 'AUTHORIZED':
-            return render(request, 'pages/success.html')
+            return render(request, 'pages/success.html', {'result': result})
         else:
             reason = result.get('status', 'Unknown reason')
             return render(request, 'pages/failure.html', {'reason': reason, 'result': result})
@@ -405,90 +409,90 @@ def transaccion_completa(request):
         return render(request, 'pages/failure.html', {'reason': str(e)})
 
 
-# def agregar_carrito(request, prod_id):
-#     producto = get_object_or_404(Producto, id_producto=prod_id)
+def agregar_carrito(request, prod_id):
+    producto = get_object_or_404(Producto, id_producto=prod_id)
     
-#     # Inicializar el carrito si no existe
-#     cart = request.session.get('cart', {})
+    # Inicializar el carrito si no existe
+    cart = request.session.get('cart', {})
 
-#     prod_id_str = str(prod_id)
+    prod_id_str = str(prod_id)
 
-#     # Agregar el producto al carrito (incrementar cantidad si ya está)
-#     if prod_id_str in cart:
-#         cart[prod_id_str]['cantidad'] += 1
-#     else:
-#         cart[prod_id_str] = {
-#             'produc_id': prod_id,
-#             'nombre': producto.nom_producto,
-#             'precio': str(producto.valor),
-#             'cantidad': 1,
-#             'imagen': producto.imagen.url  # Opcional si tienes imágenes
-#         }
+    # Agregar el producto al carrito (incrementar cantidad si ya está)
+    if prod_id_str in cart:
+        cart[prod_id_str]['cantidad'] += 1
+    else:
+        cart[prod_id_str] = {
+            'produc_id': prod_id,
+            'nombre': producto.nom_producto,
+            'precio': str(producto.valor),
+            'cantidad': 1,
+            'imagen': producto.imagen.url  # Opcional si tienes imágenes
+        }
 
-#     # Guardar el carrito de vuelta en la sesión
-#     request.session['cart'] = cart
-#     request.session.modified = True  # Indicar que la sesión ha cambiado
+    # Guardar el carrito de vuelta en la sesión
+    request.session['cart'] = cart
+    request.session.modified = True  # Indicar que la sesión ha cambiado
 
-#     return redirect('carrito')  # Cambia 'product_list' por la URL que quieras redirigir
-
-
-# def eliminar_carrito(request, prod_id):
-#     # Obtener el carrito de la sesión
-#     cart = request.session.get('cart', {})
-
-#     # Convertir el ID del producto a string para usarlo como clave
-#     prod_id_str = str(prod_id)
-
-#     # Verificar si el producto está en el carrito
-#     if prod_id_str in cart:
-#         if cart[prod_id_str]['cantidad'] > 1:
-#             # Reducir la cantidad del producto si es mayor a 1
-#             cart[prod_id_str]['cantidad'] -= 1
-#         else:
-#             # Eliminar el producto del carrito si la cantidad es 1
-#             del cart[prod_id_str]
-
-#     # Guardar el carrito actualizado en la sesión
-#     request.session['cart'] = cart
-#     request.session.modified = True  # Indicar que la sesión ha cambiado
-
-#     return redirect('carrito')  # Redirigir de nuevo al carrito
+    return redirect('carrito')  # Cambia 'product_list' por la URL que quieras redirigir
 
 
-# def moneda(request, moneda):
-#     request.session['moneda'] = moneda  # Almacenar la preferencia de moneda en la sesión
-#     url_anterior = request.META.get('HTTP_REFERER')
-#     return redirect(url_anterior)  # Redirige a la página de productos o carrito
+def eliminar_carrito(request, prod_id):
+    # Obtener el carrito de la sesión
+    cart = request.session.get('cart', {})
+
+    # Convertir el ID del producto a string para usarlo como clave
+    prod_id_str = str(prod_id)
+
+    # Verificar si el producto está en el carrito
+    if prod_id_str in cart:
+        if cart[prod_id_str]['cantidad'] > 1:
+            # Reducir la cantidad del producto si es mayor a 1
+            cart[prod_id_str]['cantidad'] -= 1
+        else:
+            # Eliminar el producto del carrito si la cantidad es 1
+            del cart[prod_id_str]
+
+    # Guardar el carrito actualizado en la sesión
+    request.session['cart'] = cart
+    request.session.modified = True  # Indicar que la sesión ha cambiado
+
+    return redirect('carrito')  # Redirigir de nuevo al carrito
 
 
-# def obtener_valor_dolar():
-#     # Llama a la función que obtiene el valor actual del dólar
-#     return float(usarSerie())
+def moneda(request, moneda):
+    request.session['moneda'] = moneda  # Almacenar la preferencia de moneda en la sesión
+    url_anterior = request.META.get('HTTP_REFERER')
+    return redirect(url_anterior)  # Redirige a la página de productos o carrito
 
 
-# def obtener_credenciales(ruta_archivo):
-#     with open(ruta_archivo, 'r') as file:
-#         user = file.readline().strip()  # Leer la primera línea (usuario)
-#         password = file.readline().strip()  # Leer la segunda línea (contraseña)
-#     return user, password
+def obtener_valor_dolar():
+    # Llama a la función que obtiene el valor actual del dólar
+    return float(usarSerie())
 
 
-# def usarSerie():
+def obtener_credenciales(ruta_archivo):
+    with open(ruta_archivo, 'r') as file:
+        user = file.readline().strip()  # Leer la primera línea (usuario)
+        password = file.readline().strip()  # Leer la segunda línea (contraseña)
+    return user, password
 
-#     user, password = obtener_credenciales('C:/Users/Inaki/OneDrive/Documentos/arq/arquitectura/tallerApp/credenciales.txt')
 
-#     fecha1=str(date.today())
-#     fecha2=str(date.today())
+def usarSerie():
 
-#     apiUrl = f"https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user={user}&pass={password}&firstdate={fecha1}&lastdate={fecha2}&timeseries=F073.TCO.PRE.Z.D&function=GetSeries"
-#     respuesta = requests.get(apiUrl)
+    user, password = obtener_credenciales('C:/Users/benja/Documents/arquitectura/tallerApp/credenciales.txt')
 
-#     if respuesta.status_code == 200:
-#         data = respuesta.json()
-#         valor = data['Series']['Obs'][0]['value']
-#         return valor
-#     else:
-#         return f"Error {respuesta.status_code}: {respuesta.text}"
+    fecha1=str(date.today())
+    fecha2=str(date.today())
 
-# resultado = usarSerie()
-# print(resultado)
+    apiUrl = f"https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user={user}&pass={password}&firstdate={fecha1}&lastdate={fecha2}&timeseries=F073.TCO.PRE.Z.D&function=GetSeries"
+    respuesta = requests.get(apiUrl)
+
+    if respuesta.status_code == 200:
+        data = respuesta.json()
+        valor = data['Series']['Obs'][0]['value']
+        return valor
+    else:
+        return f"Error {respuesta.status_code}: {respuesta.text}"
+
+resultado = usarSerie()
+print(resultado)
