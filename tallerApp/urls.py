@@ -25,6 +25,8 @@ urlpatterns = [
     path('agregar_carrito/<int:prod_id>/', views.agregar_carrito, name='agregar_carrito'),
     path('eliminar_carrito/<int:prod_id>/', views.eliminar_carrito, name='eliminar_carrito'),
     path('moneda/<str:moneda>/',views.moneda ,name='moneda'),
+    path('reservas_emp', views.reservas_emp, name='reservas_emp'),
+    path('clientes', views.clientes, name='clientes'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Reservas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    <h2 class="my-3" style="color: aliceblue;">Gestion Reservas</h2>
+                    <form action="{% url 'reservas_emp' %}" method="POST">
+                        {% csrf_token %}
+                        <table class="table table-dark table-hover table-bordered">
+                            <thead>
+                                <th>ID</th>
+                                <th>Fecha Reserva</th>
+                                <th>Hora Servicio</th>
+                                <th>Servicio</th> 
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </thead>
+                            <tbody>
+                                {% if reserva %}
+                                {% for tmp in reserva %}
+                                <tr>
+                                    <td>{{ tmp.id_reserva }}</td>
+                                    <td>{{ tmp.fecha_reserva }}</td>
+                                    <td>{{ tmp.hora_servicio }}</td>
+                                    <td>{{ tmp.servicio.nom_servicio }}</td>
+                                    <td>
+                                        <select class="form-select" name="estado_{{ tmp.id_reserva }}">
+                                            {% for estado in tmp.ESTADO_CHOICES %}
+                                            <option value="{{ estado.0 }}" {% if tmp.estado == estado.0 %}selected{% endif %}>
+                                                {{ estado.1 }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" name="update" value="{{ tmp.id_reserva }}" class="btn btn-primary">Actualizar</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </form>
+                    <div>
+                        <a href="{% url 'inventario' %}"><button class="btn btn-primary">Inventario</button></a>
+                    </div>
+                    <hr>
+                    <div>
+                        <a href="{% url 'clientes' %}"><button class="btn btn-primary">Clientes</button></a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

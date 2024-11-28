@@ -21,7 +21,7 @@
           <div class="col-md-8 shadow-lg mx-auto text-center p-3">
             <form action="{% url 'registro' %}" method="POST">
               {% csrf_token %}
-              <h2>Registro</h2>
+              <h2 style="color: aliceblue;">Registro</h2>
 
               <div class="form-floating mb-3 w-25 mx-auto">
                 <input
@@ -77,7 +77,6 @@
         </div>
       </div>
     </main>
-    {% include 'base/footer.html'%}
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   </body>

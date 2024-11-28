@@ -14,7 +14,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 shadow-lg mx-auto text-center p-3">
-                    <h2 class="my-3">Inventario</h2>
+                    <h2 class="my-3" style="color: aliceblue;">Inventario</h2>
                     <table class="table table-dark table-hover table-bordered">
                         <thead>
                             <th>ID</th>
@@ -49,7 +49,14 @@
                     </table>
                     <div>
                         <a href="{% url 'prod_add' %}"><button class="btn btn-primary">Solicitar Productos</button></a>
-
+                    </div>
+                    <hr>
+                    <div>
+                        <a href="{% url 'reservas_emp' %}"><button class="btn btn-primary">Gestion Reservas</button></a>
+                    </div>
+                    <hr>
+                    <div>
+                        <a href="{% url 'clientes' %}"><button class="btn btn-primary">Clientes</button></a>
                     </div>
                 </div>
             </div>

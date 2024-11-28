@@ -15,6 +15,13 @@ from django.urls import reverse
 def grupo_cliente(user):
     return user.groups.filter(name='cliente').exists()
 
+def clientes(request):
+    clientes = Cliente.objects.all()
+    context= {
+        "clientes":clientes,
+    }
+    return render(request, "pages/clientes.html", context)
+
 def grupo_inventario(user):
     return user.groups.filter(name='inventario').exists()
 
@@ -89,6 +96,22 @@ def reserva(request):
             "servicio": servicio,
         }
         return render(request, "pages/reserva.html", context)
+    
+def reservas_emp(request):
+    if request.method == "POST":
+        reserva_id = request.POST.get("update")
+        if reserva_id:
+            reserva = Reserva.objects.get(id_reserva=reserva_id)
+            nuevo_estado = request.POST.get(f"estado_{reserva_id}")
+            if nuevo_estado in dict(Reserva.ESTADO_CHOICES):
+                reserva.estado = nuevo_estado
+                reserva.save()
+    
+    reserva = Reserva.objects.all()
+    context = {
+        "reserva": reserva,
+    }
+    return render(request, "pages/reservas_emp.html", context)
 
 
 def catalogo(request):

@@ -18,7 +18,7 @@
                 <div class="col-md-8 shadow-lg mx-auto text-center p-3">
                     <form action="{% url 'login' %}" method="POST">
                         {% csrf_token %}
-                        <h2>Login de Acceso</h2>
+                        <h2 style="color: aliceblue;">Login de Acceso</h2>
                         <div class="form-floating mb-3 w-25 mx-auto">
                             <input type="text" class="form-control" id="email" name="email" placeholder="">
                             <label for="email" class="form-label">Correo</label>
@@ -32,19 +32,20 @@
                             {{mensaje}}
                         </div>
                         {% endif%}
-                        <div class="form-floating mb-3 w-25 mx-auto">
-                            <a href="{% url 'registro' %}">
-                                <button class="btn btn-secondary">
-                                    Registrar
-                                </button>
-                            </a>
-                        </div>
+                        
                         
                         <div class="form-floating mb-3 w-25 mx-auto">
                             <button type="submit" class="btn btn-primary">Ingresar</button>
                         </div>
                     </form>
 
+                    <div class="form-floating mb-3 w-25 mx-auto">
+                        <a href="{% url 'registro' %}">
+                            <button class="btn btn-secondary">
+                                Registrar
+                            </button>
+                        </a>
+                    </div>
                     <div class="form-floating mb-3 w-25 mx-auto">
                         <a href="{% url 'login_emp' %}">
                             <button class="btn btn-secondary">
