@@ -164,7 +164,10 @@ def prod_add(request):
         categoria = request.POST["categoria"]
         marca = request.POST["marca"]
         valor = request.POST["valor"]
-        stock = request.Post["stock"]
+        stock = request.POST["stock"]
+        # imagen = request.POST["imagen"]
+        proveedor = request.POST["proveedor"]
+
 
         objCategoria = Categoria.objects.get(id_categoria = categoria)
         obj = Producto.objects.create(
@@ -174,6 +177,8 @@ def prod_add(request):
             marca = marca,
             valor = valor,
             stock = stock,
+            # imagen = imagen,
+            proveedor = proveedor,
         )
         obj.save()
         context = {
@@ -510,7 +515,7 @@ def obtener_credenciales(ruta_archivo):
 
 def usarSerie():
 
-    user, password = obtener_credenciales('C:/Users/benja/Documents/arquitectura/tallerApp/credenciales.txt')
+    user, password = obtener_credenciales('C:/Users/Inaki/OneDrive/Escritorio/misProyectos/arquitectura/tallerApp/credenciales.txt')
 
     fecha1=str(date.today())
     fecha2=str(date.today())

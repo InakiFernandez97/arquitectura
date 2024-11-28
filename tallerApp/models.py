@@ -70,6 +70,7 @@ class Producto(models.Model):
     valor = models.IntegerField()
     stock = models.IntegerField(null=False, blank=True)
     imagen = models.ImageField(upload_to='products/', blank=True, null=True)
+    proveedor = models.CharField(max_length=100,blank=False,null=False)
 
 
     def __str__(self):
