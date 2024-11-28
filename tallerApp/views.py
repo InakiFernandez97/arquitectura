@@ -165,7 +165,7 @@ def prod_add(request):
         marca = request.POST["marca"]
         valor = request.POST["valor"]
         stock = request.POST["stock"]
-        # imagen = request.POST["imagen"]
+        imagen = request.FILES.get("imagen")
         proveedor = request.POST["proveedor"]
 
 
@@ -177,7 +177,7 @@ def prod_add(request):
             marca = marca,
             valor = valor,
             stock = stock,
-            # imagen = imagen,
+            imagen = imagen,
             proveedor = proveedor,
         )
         obj.save()

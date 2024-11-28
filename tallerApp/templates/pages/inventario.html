@@ -18,8 +18,10 @@
                     <table class="table table-dark table-hover table-bordered">
                         <thead>
                             <th>ID</th>
+                            <th>Imagen</th>
                             <th>Nombre</th>
                             <th>Categoria</th>
+                            <th>Proveedor</th>
                             <th>Marca</th>
                             <th>Valor</th>
                             <th>Stock</th>
@@ -31,8 +33,10 @@
                             {% for tmp in productos %}
                             <tr>
                                 <td>{{tmp.id_producto}}</td>
+                                <td><img src="{{tmp.imagen.url}}" alt="Imagen" style="width: 50px"></td>
                                 <td>{{tmp.nom_producto}}</td>
                                 <td>{{tmp.categoria}}</td>
+                                <td>{{tmp.proveedor}}</td>
                                 <td>{{tmp.marca}}</td>
                                 <td>$ {{tmp.valor}}</td>
                                 <td>{{tmp.stock}}</td>

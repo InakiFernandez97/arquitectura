@@ -1,55 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reserva</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/page.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-</head>
-<body>
-    
+    <link rel="stylesheet" href="{% static 'css/page.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body>
+    {% include 'base/header.html' %}
     <main>
-        <div class="formulario">
+      <div
+        class="col-md-8 shadow-lg mx-auto text-center p-5"
+        style="background-color: aliceblue"
+      >
+        <div
+          class="d-flex justify-content-center align-items-center"
+          style="height: 100vh"
+        >
+          <div class="formulario">
             <h1>Reservar hora</h1>
             <div class="campo">
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="form-floating mb-3 w-50 mx-auto">
-                        <input type="date" id="fecha" name="fecha" class="form-control" required>
-                        <label for="fecha">Fecha</label>
-                    </div>
-                    <div class="form-floating mb-3 w-50 mx-auto">
-                        <input type="time" id="hora" name="hora" class="form-control" required>
-                        <label for="hora">Hora</label>
-                    </div>
-                    <div class="form-floating mb-3 w-50 mx-auto">
-                        <select class="form-select" id="servicio" name="servicio" required>
-                            <option value="" disabled selected>Selecciona un servicio</option>
-                            {% for s in servicio %}
-                            <option value="{{ s.id_servicio }}">{{ s.nom_servicio }}</option>
-                            {% endfor %}
-                        </select>
-                        <label for="servicio">Servicios</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Reservar</button>
-                </form>
+              <form method="POST" class="fort-floating">
+                {% csrf_token %}
+                <div class="form-floating mb-3 w-50 mx-auto">
+                  <input
+                    type="date"
+                    id="fecha"
+                    name="fecha"
+                    class="form-control"
+                    required
+                  />
+                  <label for="fecha">Fecha</label>
+                </div>
+                <div class="form-floating mb-3 w-50 mx-auto">
+                  <input
+                    type="time"
+                    id="hora"
+                    name="hora"
+                    class="form-control"
+                    required
+                  />
+                  <label for="hora">Hora</label>
+                </div>
+                <div class="form-floating mb-3 w-50 mx-auto">
+                  <select
+                    class="form-select"
+                    id="servicio"
+                    name="servicio"
+                    required
+                  >
+                    <option value="" disabled selected>
+                      Selecciona un servicio
+                    </option>
+                    {% for s in servicio %}
+                    <option value="{{ s.id_servicio }}">
+                      {{ s.nom_servicio }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                  <label for="servicio">Servicios</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Reservar</button>
+              </form>
             </div>
+          </div>
         </div>
-
-        <!-- <div class="formulario">
-            {% if producto %}
-                <h2>Detalles del producto</h2>
-                <p>Nombre:  {{ producto.nom_producto }}</p>
-                <p>Categoria: {{ producto.categoria }}</p>
-                <p>Marca: {{ producto.marca }}</p>
-                <P>Precio : {{ producto.valor }}</P>
-            {% endif %}
-        </div> -->
-
+      </div>
     </main>
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-</body>
+  </body>
 </html>

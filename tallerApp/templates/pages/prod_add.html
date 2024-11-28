@@ -24,6 +24,11 @@
                         </div>
                         <div class="form-floating mb-3 w-50 mx-auto">
                             <select class="form-select" id="categoria" name="categoria">
+                                {% for tmp in categorias %}
+                                    <option value="{{tmp.id_categoria}}" {% if tmp.nombre_c == producto.id_categoria.categoria %}selected{% endif %}>
+                                        {{tmp.nombre_c}}
+                                    </option>
+                                {% endfor %} 
                                 <!-- Opciones de categorías -->
                             </select>
                             <label for="categoria">Categoria</label>
@@ -40,10 +45,10 @@
                             <input type="number" class="form-control" id="stock" name="stock">
                             <label for="stock" class="form-label">Cantidad</label>
                         </div>
-                        <!-- <div class="form-floating mb-3 w-25 mx-auto">
-                            <input type="file" class="form-control" id="imagen" name="imagen">
+                        <div class="form-floating mb-3 w-25 mx-auto">
+                            <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" >
                             <label for="imagen" class="form-label">Imagen</label>
-                        </div> -->
+                        </div>  
                         <div class="form-floating mb-3 w-50 mx-auto">
                             <input type="text" class="form-control" id="proveedor" name="proveedor">
                             <label for="proveedor">Proveedor</label>

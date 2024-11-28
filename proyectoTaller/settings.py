@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,4 +129,6 @@ TRANSBANK_COMMERCE_CODE = '597055555532'  # clave de integración
 TRANSBANK_API_KEY = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'  # secreto de integración
 TRANSBANK_ENVIRONMENT = 'TEST'  # cambiar a 'PRODUCCION' al pasar al entorno real
 
-#IMGAGENES DE BD
+#IMAGENES DE BD
+MEDIA_URL = '/media/'  # URL para acceder a los archivos de media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Carpeta donde se almacenarán los archivos
