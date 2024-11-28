@@ -282,6 +282,37 @@ def registro(request):
             "mensaje": "Registro exitoso"
         }
         return render(request, "pages/registro.html", context)
+    
+def registro_emp(request):
+    if request.method != "POST":
+        return render(request, "pages/registro_emp.html")
+    else:
+        nombre = request.POST["nombre"]
+        esp = request.POST["especialidad"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        tipo = Tipo_empleado.objects.get(id_tipo=1)
+
+        # Verificar si el email ya existe
+        if Empleado.objects.filter(mail_empleado=email).exists():
+            context = {
+                "mensaje": "El correo ya está registrado."
+            }
+            return render(request, "pages/registro_emp.html", context)
+
+        # Crear nuevo cliente
+        obj = Empleado.objects.create(
+            nom_empleado=nombre,
+            especialidad=esp,
+            tipo=tipo,
+            mail_empleado=email,
+            contrasena_emp=password
+        )
+        obj.save()
+        context = {
+            "mensaje": "Registro exitoso"
+        }
+        return render(request, "pages/registro_emp.html", context)
 
 def login(request):
     if request.method != "POST":
@@ -494,5 +525,5 @@ def usarSerie():
     else:
         return f"Error {respuesta.status_code}: {respuesta.text}"
 
-resultado = usarSerie()
-print(resultado)
+# resultado = usarSerie()
+# print(resultado)
